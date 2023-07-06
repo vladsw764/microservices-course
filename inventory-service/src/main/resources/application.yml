@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/inventory_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5430/inventory-service
+    username: vladsw764
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
 server:
   port: 8083

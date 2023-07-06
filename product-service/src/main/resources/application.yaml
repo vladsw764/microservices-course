@@ -1,11 +1,4 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: admin
-      username: rootuser
-      password: rootpass
-      authentication-database: admin
-      auto-index-creation: true
-
+      uri: mongodb://localhost:27017/admin
