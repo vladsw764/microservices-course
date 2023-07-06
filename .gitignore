@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/mongo-data
+/postgres-inventory
+/postgres-order
