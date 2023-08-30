@@ -11,5 +11,10 @@ eureka:
   username: ${EUREKA_USERNAME:eureka}
   password: ${EUREKA_PASSWORD:{noop}password}
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 server:
   port: 8761

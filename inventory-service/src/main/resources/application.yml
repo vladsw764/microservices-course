@@ -10,6 +10,11 @@ spring:
   application:
     name: inventory-service
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 server:
   port: 0
 

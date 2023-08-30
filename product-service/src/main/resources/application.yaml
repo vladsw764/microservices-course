@@ -5,6 +5,11 @@ spring:
   application:
     name: product-service
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 eureka:
   client:
     service-url:

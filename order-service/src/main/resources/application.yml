@@ -9,6 +9,8 @@ spring:
       ddl-auto: update
   application:
     name: order-service
+  config:
+    import: optional:test.properties
 
 server:
   port: 8082
@@ -27,27 +29,27 @@ resilience4j:
         register-health-indicator: true
         event-consumer-buffer-size: 10
         sliding-window-type: COUNT_BASED
-        sliding-window-size: 5
+        sliding-window-size: 2
         failure-rate-threshold: 50
-        wait-duration-in-open-state:
-          seconds: 5
+#        wait-duration-in-open-state:
+#          seconds: 5 # TODO: check why here error
         permitted-number-of-calls-in-half-open-state: 3
         automatic-transition-from-open-to-half-open-enabled: true
 
   ## Timeout config
-  timelimiter:
-    instances:
-      inventory:
-        timeout-duration:
-          seconds: 3
+#  timelimiter:
+#    instances:
+#      inventory:
+##        timeout-duration:
+##          seconds: 3
 
   ## Retry config
-  retry:
-    instances:
-      inventory:
-        max-attempts: 3
-        wait-duration:
-          seconds: 5
+#  retry:
+#    instances:
+#      inventory:
+#        max-attempts: 3
+##        wait-duration:
+##          seconds: 5
 
 management:
   health:
@@ -56,7 +58,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: 1.0
