@@ -15,6 +15,12 @@ spring:
 server:
   port: 8082
 
+
+logging:
+  level:
+    root: INFO
+    com.isariev.orderservice: DEBUG
+
 eureka:
   client:
     service-url:
@@ -34,7 +40,8 @@ resilience4j:
 #        wait-duration-in-open-state:
 #          seconds: 5 # TODO: check why here error
         permitted-number-of-calls-in-half-open-state: 3
-        automatic-transition-from-open-to-half-open-enabled: true
+
+        automatic-transition-from-open-to-half-open-enabled: false
 
   ## Timeout config
 #  timelimiter:
