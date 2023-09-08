@@ -1,4 +1,4 @@
-package com.isariev.orderservice.config.kafkaConfig;
+package com.example.inventoryservice.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -25,16 +25,17 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
         return props;
     }
 
     @Bean
-    public ProducerFactory<String, List<String>> producerFactory() {
+    public ProducerFactory<String, Long> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, List<String>> kafkaTemplate(ProducerFactory<String, List<String>> producerFactory) {
+    public KafkaTemplate<String, Long> kafkaTemplate(ProducerFactory<String, Long> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }

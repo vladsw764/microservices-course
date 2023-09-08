@@ -1,21 +1,19 @@
 package com.isariev.orderservice.service;
 
-import com.isariev.orderservice.dto.InventoryResponse;
-import com.isariev.orderservice.dto.OrderLineItemsDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isariev.orderservice.dto.OrderRequest;
-import com.isariev.orderservice.exception.ProductNotExistException;
+import com.isariev.orderservice.dto.mapper.OrderMapper;
 import com.isariev.orderservice.model.Order;
 import com.isariev.orderservice.model.OrderLineItems;
 import com.isariev.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,42 +21,40 @@ import java.util.UUID;
 @Slf4j
 public class OrderService {
 
-    private final WebClient.Builder webClientBuilder;
     private final OrderRepository orderRepository;
+    private final KafkaTemplate<String, List<String>> kafkaTemplate;
+    private final static String TOPIC = "order-inventory-topic";
+    private final static String TOPIC_NEW = "order-inventory-topic-1";
 
-    public String placeOrder(OrderRequest orderRequest) {
+
+    public void placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
-        order.setOrderNumber(UUID.randomUUID().toString());
-        List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
-                .stream().map(this::mapToEntity)
-                .toList();
+        try {
+            order.setOrderNumber(UUID.randomUUID().toString());
+            List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
+                    .stream().map(OrderMapper::mapToEntity)
+                    .toList();
+            order.setOrderLineItemsList(orderLineItems);
+            order.setStatus("SUCCESS");
 
-        order.setOrderLineItemsList(orderLineItems);
+            Order savedOrder = orderRepository.save(order);
 
-        List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
+            List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
+            Map<String, Object> message = new HashMap<>();
+            message.put("orderId", savedOrder.getId());
+            message.put("skuCodes", skuCodes);
 
-        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
-                .uri("http://inventory-service/api/inventory",
-                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-                .retrieve()
-                .bodyToMono(InventoryResponse[].class)
-                .block();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        boolean allProductsInStock = Arrays.stream(inventoryResponseArray).allMatch(InventoryResponse::isInStock);
-
-        if (allProductsInStock) {
+            kafkaTemplate.send(TOPIC, List.of(objectMapper.writeValueAsString(message)));
+        } catch (Exception e) {
+            order.setStatus("FAILED");
             orderRepository.save(order);
-            return "Order placed successfully";
-        } else {
-            throw new ProductNotExistException("Product is not in stock, please try again latter");
         }
     }
 
-    private OrderLineItems mapToEntity(OrderLineItemsDto orderLineItemsDto) {
-        OrderLineItems orderLineItems = new OrderLineItems();
-        orderLineItems.setPrice(orderLineItemsDto.getPrice());
-        orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
-        orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
-        return orderLineItems;
+    @KafkaListener(topics = TOPIC_NEW, groupId = "groupId")
+    public void consumeSkuCodes(Long orderId) {
+        orderRepository.updateStatusById("FAILED", orderId);
     }
 }
