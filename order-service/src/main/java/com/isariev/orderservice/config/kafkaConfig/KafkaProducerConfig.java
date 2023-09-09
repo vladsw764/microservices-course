@@ -1,5 +1,6 @@
 package com.isariev.orderservice.config.kafkaConfig;
 
+import com.isariev.orderservice.dto.OrderResponseDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -29,12 +29,12 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, List<String>> producerFactory() {
+    public ProducerFactory<String, OrderResponseDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, List<String>> kafkaTemplate(ProducerFactory<String, List<String>> producerFactory) {
+    public KafkaTemplate<String, OrderResponseDto> kafkaTemplate(ProducerFactory<String, OrderResponseDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
