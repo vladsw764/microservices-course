@@ -5,9 +5,12 @@ import com.example.inventoryservice.dto.OrderResponseDto;
 import com.example.inventoryservice.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.internals.Topic;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +25,8 @@ public class InventoryService {
     private final static String TOPIC = "order-inventory-topic";
     private final static String TOPIC_NEW = "order-inventory-topic-1";
 
-    @KafkaListener(topics = TOPIC, groupId = "groupId", containerFactory = "factory")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @KafkaListener(topics = TOPIC_NEW, groupId = "groupId", containerFactory = "factory")
     public void consumeSkuCodes(OrderResponseDto responseDto) {
         List<InventoryResponse> responses = inventoryRepository
                 .findBySkuCodeIn(responseDto.skuCodes())

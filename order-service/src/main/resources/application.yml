@@ -23,6 +23,7 @@ logging:
   level:
     root: INFO
     com.isariev.orderservice: DEBUG
+    org.springframework.transaction: DEBUG
 
 eureka:
   client:
