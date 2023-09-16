@@ -1,9 +1,10 @@
 package com.isariev.customerservice.controller;
 
-import com.isariev.customerservice.dto.OrderInfoDto;
+import com.isariev.customerservice.dto.OrderDiscountDto;
 import com.isariev.customerservice.service.CustomerServiceImpl;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -21,7 +22,7 @@ public class CustomerController {
 //    }
 
     @GetMapping()
-    public Integer getOrdersInMonth(){
+    public OrderDiscountDto getOrdersInMonth() {
         return customerService.getOrdersInMonth();
     }
 }

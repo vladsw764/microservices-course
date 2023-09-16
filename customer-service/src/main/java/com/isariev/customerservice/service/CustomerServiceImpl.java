@@ -1,6 +1,7 @@
 package com.isariev.customerservice.service;
 
 import com.isariev.customerservice.dto.OrderDetailsDto;
+import com.isariev.customerservice.dto.OrderDiscountDto;
 import com.isariev.customerservice.dto.OrderInfoDto;
 import com.isariev.customerservice.dto.mapper.CustomerMapper;
 import com.isariev.customerservice.model.Customer;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl {
@@ -35,13 +35,14 @@ public class CustomerServiceImpl {
         );
     }
 
-    public Integer getOrdersInMonth() {
+    public OrderDiscountDto getOrdersInMonth() {
         var customersId = customerRepository.findAll().stream().map(Customer::getUserId).toList();
         List<OrderInfoDto> ordersInfo = new ArrayList<>();
         for (var id : customersId) {
             ordersInfo.add(getCountOfOrdersById(id));
         }
-        return ordersInfo.stream().filter(orderInfoDto -> orderInfoDto.count()>=2).toList().size();
+        int count = ordersInfo.stream().filter(orderInfoDto -> orderInfoDto.count() >= 2).toList().size();
+        return new OrderDiscountDto(count, "In next month you have discount 50$");
     }
 
     @KafkaListener(topics = TOPIC_NEW, groupId = "groupId", containerFactory = "factory")
