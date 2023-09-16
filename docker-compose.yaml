@@ -45,6 +45,17 @@ services:
     volumes:
       - ./mongo-data:/data/db
 
+  mongo-customer:
+    container_name: mongo-customer-service
+    image: mongo:7.0
+    restart: always
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_DATABASE: customer-db
+    volumes:
+      - mongo-data:/data/db
+
   ## Zipkin
   zipkin:
     image: openzipkin/zipkin
@@ -78,3 +89,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+volumes:
+  mongo-data:

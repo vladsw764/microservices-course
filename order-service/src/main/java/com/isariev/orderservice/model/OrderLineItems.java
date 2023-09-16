@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "t_order_line_items")
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderLineItems {
@@ -22,4 +21,20 @@ public class OrderLineItems {
     private String skuCode;
     private BigDecimal price;
     private Integer quantity;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }

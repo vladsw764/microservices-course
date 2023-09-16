@@ -1,7 +1,6 @@
-package com.isariev.orderservice.config.kafkaConfig;
+package com.isariev.customerservice.config.kafkaConfig;
 
-import com.isariev.orderservice.dto.OrderDetailsDto;
-import com.isariev.orderservice.dto.OrderResponseDto;
+import com.isariev.customerservice.dto.OrderDetailsDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,22 +29,12 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, OrderResponseDto> producerInventoryFactory() {
+    public ProducerFactory<String, OrderDetailsDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public ProducerFactory<String, OrderDetailsDto> producerCustomerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String, OrderResponseDto> kafkaTemplate(ProducerFactory<String, OrderResponseDto> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-    @Bean
-    public KafkaTemplate<String, OrderDetailsDto> kafkaCustomerTemplate(ProducerFactory<String, OrderDetailsDto> producerFactory) {
+    public KafkaTemplate<String, OrderDetailsDto> kafkaTemplate(ProducerFactory<String, OrderDetailsDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
