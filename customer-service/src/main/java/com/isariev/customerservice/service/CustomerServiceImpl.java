@@ -8,6 +8,10 @@ import com.isariev.customerservice.repository.CustomerRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CustomerServiceImpl {
 
@@ -31,6 +35,14 @@ public class CustomerServiceImpl {
         );
     }
 
+    public Integer getOrdersInMonth() {
+        var customersId = customerRepository.findAll().stream().map(Customer::getUserId).toList();
+        List<OrderInfoDto> ordersInfo = new ArrayList<>();
+        for (var id : customersId) {
+            ordersInfo.add(getCountOfOrdersById(id));
+        }
+        return ordersInfo.stream().filter(orderInfoDto -> orderInfoDto.count()>=2).toList().size();
+    }
 
     @KafkaListener(topics = TOPIC_NEW, groupId = "groupId", containerFactory = "factory")
     public void saveCustomerDetails(OrderDetailsDto orderDetails) {

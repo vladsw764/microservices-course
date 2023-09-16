@@ -15,8 +15,13 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
-    public OrderInfoDto getCountOfOrders(@RequestParam("customerId") String customerId) {
-        return customerService.getCountOfOrdersById(customerId);
+//    @GetMapping
+//    public OrderInfoDto getCountOfOrders(@RequestParam("customerId") String customerId) {
+//        return customerService.getCountOfOrdersById(customerId);
+//    }
+
+    @GetMapping()
+    public Integer getOrdersInMonth(){
+        return customerService.getOrdersInMonth();
     }
 }
