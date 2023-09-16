@@ -1,6 +1,7 @@
 package com.isariev.customerservice.service;
 
 import com.isariev.customerservice.dto.OrderDetailsDto;
+import com.isariev.customerservice.dto.OrderInfoDto;
 import com.isariev.customerservice.dto.mapper.CustomerMapper;
 import com.isariev.customerservice.model.Customer;
 import com.isariev.customerservice.repository.CustomerRepository;
@@ -18,6 +19,16 @@ public class CustomerServiceImpl {
     public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+    }
+
+    public OrderInfoDto getCountOfOrdersById(String customerId) {
+        int count = customerRepository.findAllByCustomerId(customerId).size();
+
+        return new OrderInfoDto(
+                count,
+                customerId,
+                "Text"
+        );
     }
 
 

@@ -6,6 +6,8 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
 
+  application:
+    name: customer-service
 
 eureka:
   client:

@@ -30,10 +30,10 @@ public class InventoryService {
     @KafkaListener(topics = INVENTORY_TOPIC, groupId = "groupId", containerFactory = "factory")
     public void consumeSkuCodes(OrderResponseDto responseDto) {
         List<InventoryResponse> responses = fetchInventoryResponse(responseDto);
-        throw new RuntimeException("exception");
-//        if (!responses.stream().allMatch(InventoryResponse::isInStock)) {
-//            kafkaTemplate.send(ORDER_TOPIC, responseDto.orderId());
-//        }
+
+        if (!responses.stream().allMatch(InventoryResponse::isInStock)) {
+            kafkaTemplate.send(ORDER_TOPIC, responseDto.orderId());
+        }
     }
 
     private List<InventoryResponse> fetchInventoryResponse(OrderResponseDto responseDto) {
