@@ -14,6 +14,8 @@ public class CustomerMapper {
 
         Customer customer = new Customer();
         customer.setUserId(dto.userId());
+        customer.setUsername(dto.username());
+        customer.setEmail(dto.email());
         customer.setDeliveryCountry(dto.deliveryCountry());
         customer.setDeliveryCity(dto.deliveryCity());
         customer.setDeliveryStreet(dto.deliveryStreet());
@@ -35,6 +37,8 @@ public class CustomerMapper {
                 entity.getDeliveryStreet(),
                 entity.getDeliveryAddress(),
                 entity.getUserId(),
+                entity.getUsername(),
+                entity.getEmail(),
                 entity.getOrderId()
         );
     }
