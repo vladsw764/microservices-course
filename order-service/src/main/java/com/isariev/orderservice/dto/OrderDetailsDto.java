@@ -6,7 +6,8 @@ public record OrderDetailsDto(
         String deliveryStreet,
         String deliveryAddress,
         String userId,
+        String username,
+        String email,
         Long orderId
 ) {
 }
-
