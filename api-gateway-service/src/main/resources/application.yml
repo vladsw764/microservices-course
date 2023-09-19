@@ -1,0 +1,82 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/customer-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/inventory-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: discovery-server
+          uri: http://eureka:password@${app.eureka-server}:8761
+          predicates:
+            - Path=/eureka/web/**
+          filters:
+            - SetPath=/
+
+        - id: discovery-server-static
+          uri: http://eureka:password@${app.eureka-server}:8761
+          predicates:
+            - Path=/eureka/**
+
+  # Security
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://www.test-isariev.space/console/admin/realms/microservices-auth-code
+
+  application:
+    name: api-gateway
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@localhost:8761/eureka
+
+app:
+  eureka-server: localhost
+
+
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+server:
+  port: 8181
+
+jwt:
+  converter:
+    principle-attribute: preferred_username
