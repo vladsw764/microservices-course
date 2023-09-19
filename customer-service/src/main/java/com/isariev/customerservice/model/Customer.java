@@ -1,6 +1,8 @@
 package com.isariev.customerservice.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +19,10 @@ public class Customer {
     private String id;
 
     private String userId;
+
+    private String username;
+
+    private String email;
 
     private String deliveryCountry;
 
@@ -36,7 +42,9 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id='" + id + '\'' +
-                ", username='" + userId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 ", deliveryCountry='" + deliveryCountry + '\'' +
                 ", deliveryCity='" + deliveryCity + '\'' +
                 ", deliveryStreet='" + deliveryStreet + '\'' +
@@ -76,6 +84,23 @@ public class Customer {
 
     public String getId() {
         return id;
+    }
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserId() {
