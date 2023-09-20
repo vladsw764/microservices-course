@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -24,7 +23,6 @@ import java.util.concurrent.CompletionStage;
 public class OrderController {
 
     private final OrderService orderService;
-    private final HttpServletRequest request;
 
 
     @PostMapping
@@ -33,10 +31,7 @@ public class OrderController {
     @TimeLimiter(name = "order-service")
     public CompletionStage<Void> placeOrder(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
         log.info("Attempting to place an order.");
-
-        return CompletableFuture.runAsync(() -> {
-            orderService.placeOrder(orderRequest, request);
-        });
+        return CompletableFuture.runAsync(() -> orderService.placeOrder(orderRequest, request));
     }
 }
 
