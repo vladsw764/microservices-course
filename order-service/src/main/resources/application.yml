@@ -108,3 +108,13 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+#logger
+rest:
+    methods:
+      logger:
+        enabled: true
+service:
+    methods:
+      logger:
+        enabled: false

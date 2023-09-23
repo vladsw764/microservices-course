@@ -107,4 +107,5 @@ public class OrderService {
         log.error("Order was failed with id: {}", orderId);
         orderRepository.updateStatusById("FAILED", orderId);
     }
+
 }

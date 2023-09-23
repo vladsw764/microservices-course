@@ -35,4 +35,9 @@ public class KafkaTopicConfig {
         return TopicBuilder.name(customerTopic)
                 .build();
     }
+
+    @Bean
+    public NewTopic adviceTopic() {
+        return new NewTopic(customerTopic, 3, (short) 1);
+    }
 }
