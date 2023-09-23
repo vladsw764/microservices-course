@@ -15,7 +15,7 @@ jobs:
           cache: maven
 
       - name: Compile and Build
-        run: mvn clean install --DskipTests --batch-mode --update-snapshots
+        run: mvn clean install -DskipTests --batch-mode --update-snapshots
 
       - name: Copy .jar
         run: mkdir build && cp target/*.jar build
