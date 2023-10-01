@@ -64,4 +64,9 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>inventory-service</finalName>
+        <directory>../build/inventory-service</directory>
+    </build>
+
 </project>

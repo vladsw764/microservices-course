@@ -10,7 +10,8 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic orderInventoryTopic() {
-        return TopicBuilder.name("order-inventory-topic-1")
+        return TopicBuilder.name("inventory-topic")
+                .partitions(3)
                 .build();
     }
 }

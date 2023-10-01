@@ -7,7 +7,11 @@ import com.isariev.customerservice.dto.mapper.CustomerMapper;
 import com.isariev.customerservice.model.Customer;
 import com.isariev.customerservice.repository.CustomerRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -17,7 +21,9 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl {
 
-    private final static String TOPIC_NEW = "customer-order-topic";
+    private final static String ORDER_TOPIC = "order-topic";
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     private final CustomerRepository customerRepository;
 
@@ -66,11 +72,15 @@ public class CustomerServiceImpl {
         return new OrderDiscountDto(count, "In next month you have discount 50$");
     }
 
-    @KafkaListener(topics = TOPIC_NEW, groupId = "groupId", containerFactory = "factory")
-    public void saveCustomerDetails(OrderDetailsDto orderDetails) {
-        Customer customer = customerMapper.mapToEntity(orderDetails);
-        customerRepository.save(customer);
-        System.out.println(customer);
+    @KafkaListener(topics = ORDER_TOPIC,
+            groupId = "groupId",
+            containerFactory = "factory",
+            topicPartitions = @TopicPartition(topic = ORDER_TOPIC, partitions = {"2"})
+    )
+    public void saveCustomerDetails(@Payload OrderDetailsDto orderDetails) {
+        Customer savedCustomer = customerRepository.save(customerMapper.mapToEntity(orderDetails));
+        LOGGER.info("customer saved with id: {}", savedCustomer.getId());
+        LOGGER.info("customer details: {}, {}", savedCustomer.getDeliveryStreet(), savedCustomer.getDeliveryAddress());
     }
 
     private String getCustomerId() {

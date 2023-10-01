@@ -82,4 +82,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>gateway-service</finalName>
+        <directory>../build/gateway-service</directory>
+    </build>
 </project>

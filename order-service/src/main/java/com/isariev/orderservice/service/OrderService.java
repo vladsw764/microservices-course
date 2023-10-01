@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final WebClient webClient;
     private final KafkaEventHandler eventHandler;
+    private final static String INVENTORY_TOPIC = "inventory-topic";
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void placeOrder(final OrderRequest orderRequest, HttpServletRequest request) {
@@ -102,8 +105,8 @@ public class OrderService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @KafkaListener(topics = "${spring.kafka.topics.order}", groupId = "groupId")
-    public void consumeSkuCodes(final Long orderId) {
+    @KafkaListener(topics = INVENTORY_TOPIC, groupId = "groupId")
+    public void consumeSkuCodes(@Payload final Long orderId) {
         log.error("Order was failed with id: {}", orderId);
         orderRepository.updateStatusById("FAILED", orderId);
     }

@@ -88,6 +88,8 @@
     </dependencies>
 
     <build>
+        <finalName>customer-service</finalName>
+        <directory>../build/customer-service</directory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

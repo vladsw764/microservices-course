@@ -8,6 +8,7 @@ import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,10 @@ public class OrderController {
     @TimeLimiter(name = "order-service")
     public CompletionStage<Void> placeOrder(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
         log.info("Attempting to place an order.");
-        return CompletableFuture.runAsync(() -> orderService.placeOrder(orderRequest, request));
+        return CompletableFuture.runAsync(() -> {
+            orderService.placeOrder(orderRequest, request);
+            ResponseEntity.ok("order placed successfully");
+        });
     }
 }
 

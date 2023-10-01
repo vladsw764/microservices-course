@@ -12,23 +12,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaEventHandler {
 
-    private final KafkaTemplate<String, OrderResponseDto> kafkaTemplate;
-    private final KafkaTemplate<String, OrderDetailsDto> orderInfoDtoKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final KafkaTopicConfig topicConfig;
     private static String CUSTOMER_ORDER_TOPIC;
-    private static String INVENTORY_ORDER_TOPIC;
 
     @PostConstruct
     private void init() {
         CUSTOMER_ORDER_TOPIC = topicConfig.customerOrderTopic().name();
-        INVENTORY_ORDER_TOPIC = topicConfig.inventoryOrderTopic().name();
     }
 
     public void sendOrderResponse(OrderResponseDto orderResponseDto) {
-        kafkaTemplate.send(INVENTORY_ORDER_TOPIC, orderResponseDto);
+        kafkaTemplate.send(CUSTOMER_ORDER_TOPIC, 1, String.valueOf(orderResponseDto.orderId()), orderResponseDto);
     }
 
     public void sendOrderDetails(OrderDetailsDto orderDetailsDto) {
-        orderInfoDtoKafkaTemplate.send(CUSTOMER_ORDER_TOPIC, orderDetailsDto);
+        kafkaTemplate.send(CUSTOMER_ORDER_TOPIC, 2, String.valueOf(orderDetailsDto.orderId()), orderDetailsDto);
     }
 }

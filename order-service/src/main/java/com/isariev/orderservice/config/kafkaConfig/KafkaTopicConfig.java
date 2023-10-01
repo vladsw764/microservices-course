@@ -9,35 +9,14 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${spring.kafka.topics.inventory}")
-    private String inventoryTopic;
-
     @Value("${spring.kafka.topics.order}")
-    private String orderTopic;
-
-    @Value("${spring.kafka.topics.customer}")
-    private String customerTopic;
-
-    @Bean
-    public NewTopic orderInventoryTopic() {
-        return TopicBuilder.name(orderTopic)
-                .build();
-    }
-
-    @Bean
-    public NewTopic inventoryOrderTopic() {
-        return TopicBuilder.name(inventoryTopic)
-                .build();
-    }
+    private String topicName;
 
     @Bean
     public NewTopic customerOrderTopic() {
-        return TopicBuilder.name(customerTopic)
+        return TopicBuilder.name(topicName)
+                .partitions(3)
+                .replicas((short) 1)
                 .build();
-    }
-
-    @Bean
-    public NewTopic adviceTopic() {
-        return new NewTopic(customerTopic, 3, (short) 1);
     }
 }
