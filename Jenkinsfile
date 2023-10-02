@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'maven_latest'
+    }
+
     options {
         scm {
             git {
