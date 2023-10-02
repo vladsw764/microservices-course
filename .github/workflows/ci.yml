@@ -26,7 +26,8 @@ jobs:
           fi
 
       - name: Copy JAR files
-        run: cp -r customer-service/target/*.jar build/ && cp -r discovery-service/target/*.jar build/ && cp -r gateway-service/target/*.jar build/ && cp -r inventory-service/target/*.jar build/ && cp -r order-service/target/*.jar build/
+        run: |
+          cp build/customer-service/customer-service.jar build/discovery-service/discovery-service.jar build/gateway-service/gateway-service.jar build/inventory-service/inventory-service.jar build/order-service/order-service.jar build/
 
       - name: Upload JAR files
         uses: actions/upload-artifact@v2
