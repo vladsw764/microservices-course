@@ -4,8 +4,10 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -17,10 +19,14 @@ jobs:
       - name: Compile and Build
         run: mvn clean install -DskipTests --batch-mode --update-snapshots
 
-      - name: Copy .jar
-        run: mkdir build && cp target/*.jar build
+      - name: Create Build Directory
+        run: mkdir build
 
-      - uses: actions/upload-artifact@v2
+      - name: Copy JAR files
+        run: cp -r customer-service/target/*.jar build/ && cp -r discovery-service/target/*.jar build/ && cp -r gateway-service/target/*.jar build/ && cp -r inventory-service/target/*.jar build/ && cp -r order-service/target/*.jar build/
+
+      - name: Upload JAR files
+        uses: actions/upload-artifact@v2
         with:
-          name: .jar
+          name: microservices-jars
           path: build
