@@ -32,4 +32,5 @@ pipeline {
             echo 'Build failed. Check the console output for details.'
         }
     }
+
 }
