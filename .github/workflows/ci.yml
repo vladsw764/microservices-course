@@ -20,7 +20,10 @@ jobs:
         run: mvn clean install -DskipTests --batch-mode --update-snapshots
 
       - name: Create Build Directory
-        run: mkdir build
+        run: |
+          if [ ! -d "build" ]; then
+            mkdir build
+          fi
 
       - name: Copy JAR files
         run: cp -r customer-service/target/*.jar build/ && cp -r discovery-service/target/*.jar build/ && cp -r gateway-service/target/*.jar build/ && cp -r inventory-service/target/*.jar build/ && cp -r order-service/target/*.jar build/
