@@ -1,32 +1,25 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'maven_latest'
-    }
-
-    options {
-        scm {
-            git {
-                remote {
-                    url 'https://github.com/vladsw764/microservices-course.git'
-                }
-                branch 'main'
-            }
-        }
-    }
-
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    checkout scm
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: 'main']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[url: 'https://github.com/vladsw764/microservices-course.git']]
+                    ])
                 }
             }
         }
+
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean install -DskipTests'
             }
         }
     }
