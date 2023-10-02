@@ -2,8 +2,10 @@ version: '3'
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
-    container_name: jenkins
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jenkins-maven
     ports:
       - "8080:8080"
       - "50000:50000"
