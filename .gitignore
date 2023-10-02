@@ -3,8 +3,11 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/build/*/*.jar
-!/build/**/*.jar
+/build/*
+!/build/*/
+/build/*/*
+!/build/*/*.jar
+
 
 
 
