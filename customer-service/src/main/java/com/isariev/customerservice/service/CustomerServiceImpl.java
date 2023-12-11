@@ -13,6 +13,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class CustomerServiceImpl {
         return new OrderDiscountDto(count, "In next month you have discount 50$");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @KafkaListener(topics = ORDER_TOPIC,
             groupId = "groupId",
             containerFactory = "factory",

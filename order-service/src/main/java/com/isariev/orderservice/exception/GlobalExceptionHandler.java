@@ -17,11 +17,6 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), ex.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ProblemDetail handleRuntimeException(RuntimeException ex) {
-        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), ex.getMessage());
-    }
-
     @ExceptionHandler(BadRequest.class)
     public ProblemDetail handleBadRequest(BadRequest ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());

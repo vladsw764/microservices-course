@@ -33,30 +33,30 @@ eureka:
     service-url:
       defaultZone:
         http://eureka:password@localhost:8761/eureka
-
-## Resilience4J Configuration
-resilience4j:
-  circuitbreaker:
-    instances:
-      order-service:
-        failureRateThreshold: 50
-        waitDurationInOpenState: 5s
-        permittedNumberOfCallsInHalfOpenState: 3
-        minimumNumberOfCalls: 5
-        slidingWindowType: COUNT_BASED
-        slidingWindowSize: 10
-        eventConsumerBufferSize: 10
-        registerHealthIndicator: true
-  retry:
-    instances:
-      order-service:
-        maxAttempts: 3
-        waitDuration: 1s
-  timelimiter:
-    instances:
-      order-service:
-        timeoutDuration: 5s
-        cancelRunningFuture: true
+#
+### Resilience4J Configuration
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      order-service:
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 5s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        minimumNumberOfCalls: 5
+#        slidingWindowType: COUNT_BASED
+#        slidingWindowSize: 10
+#        eventConsumerBufferSize: 10
+#        registerHealthIndicator: true
+#  retry:
+#    instances:
+#      order-service:
+#        maxAttempts: 3
+#        waitDuration: 1s
+#  timelimiter:
+#    instances:
+#      order-service:
+#        timeoutDuration: 5s
+#        cancelRunningFuture: true
 
 management:
   health:

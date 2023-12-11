@@ -4,6 +4,8 @@ spring:
       routes:
         - id: order-service
           uri: lb://order-service
+#          uri:
+#            http://localhost:8082/order-service
           predicates:
             - Path=/order-service/**
           filters:
@@ -42,13 +44,6 @@ spring:
           predicates:
             - Path=/eureka/**
 
-  # Security
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://www.test-isariev.space/console/admin/realms/microservices-auth-code
-
   application:
     name: api-gateway
 
@@ -77,6 +72,19 @@ management:
 server:
   port: 8181
 
-jwt:
-  converter:
-    principle-attribute: preferred_username
+
+# Security configuration
+cognito:
+  idp:
+    client:
+      id: ${COGNITO_IDP_CLIENT_ID}
+
+aws:
+  cognito:
+    course:
+      common:
+        access:
+          key: ${AWS_ACCESS_KEY_ID}
+      secret:
+        access:
+          key: ${AWS_SECRET_ACCESS_KEY}
