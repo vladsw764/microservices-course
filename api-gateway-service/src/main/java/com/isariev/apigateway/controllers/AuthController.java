@@ -4,7 +4,6 @@ import com.isariev.apigateway.dtos.ConfirmRequest;
 import com.isariev.apigateway.dtos.SignInRequest;
 import com.isariev.apigateway.dtos.SignUpRequestDto;
 import com.isariev.apigateway.service.userauth.UserAuthService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
